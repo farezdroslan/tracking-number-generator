@@ -30,9 +30,9 @@ To run this application locally, ensure the following:
 Powershell:
 
 ```
-$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_URL="jdbc:postgresql://localhost:5432/trackapp"
-$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_USER="postgres"
-$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_PASSWORD="admin"
+$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_URL="jdbc:postgresql://localhost:5432/<DatabaseName>"
+$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_USER="<username>"
+$env:SPRING_TRACK_NUMBER_GEN_DATASOURCE_PASSWORD="<password>"
 ```
 
 ```
