@@ -5,6 +5,7 @@ import com.teleport.tracking_number_generator.models.StoreModel;
 import com.teleport.tracking_number_generator.models.TrackNumber;
 import com.teleport.tracking_number_generator.service.StoreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +35,29 @@ public class StoreController {
         this.storeService = storeService;
     }
 
+    @PostMapping("/insert")
+    public ResponseEntity<?> insert(@Valid @RequestBody StoreModel storeRequest) {
+        log.info("Incoming POST request - Origin Country ID: {}, Destination Country ID: {}",
+                storeRequest.getOriginCountryId(), storeRequest.getDestinationCountryId());
+
+        try {
+            StoreModel store = new StoreModel();
+            store.setOriginCountryId(storeRequest.getOriginCountryId());
+            store.setDestinationCountryId(storeRequest.getDestinationCountryId());
+            store.setWeight(storeRequest.getWeight());
+            store.setCreatedAt(storeRequest.getCreatedAt());
+            store.setCustomerId(storeRequest.getCustomerId());
+            store.setCustomerName(storeRequest.getCustomerName());
+            store.setCustomerSlug(storeRequest.getCustomerSlug());
+
+            Store inserted = storeService.insert(store);
+            return ResponseEntity.status(HttpStatus.CREATED).body(inserted);
+        } catch (Exception e) {
+            log.error("Unexpected error while generating tracking number", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to insert"));
+        }
+    }
 
     @GetMapping("/next-tracking-number")
     public ResponseEntity<?> getTrackingNumber(
@@ -65,12 +88,12 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.OK).body(trackedNumber);
     }
 
-    @PutMapping("/update/{id}")
-    public void update(
-            @PathVariable("id") Long id,
-            @RequestParam(name = "createdAt", required = false)
-            String createdAt, @RequestParam String name) {
-        log.info("createdAt : {}", createdAt);
-        storeService.update(id, createdAt, name);
-    }
+//    @PutMapping("/update/{id}")
+//    public void update(
+//            @PathVariable("id") Long id,
+//            @RequestParam(name = "createdAt", required = false)
+//            String createdAt, @RequestParam String name) {
+//        log.info("createdAt : {}", createdAt);
+//        storeService.update(id, createdAt, name);
+//    }
 }

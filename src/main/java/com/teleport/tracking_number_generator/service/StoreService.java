@@ -37,6 +37,34 @@ public class StoreService {
 
     }
 
+    public Store insert(StoreModel storeModel) {
+        List<Store> existingRecord = storeRepository.findByOriginCountryIdAndDestinationCountryIdAndWeightAndCreatedAtAndCustomerIdAndCustomerNameAndCustomerSlug(
+                storeModel.getOriginCountryId(),
+                storeModel.getDestinationCountryId(),
+                storeModel.getWeight(),
+                storeModel.getCreatedAt(),
+                storeModel.getCustomerId(),
+                storeModel.getCustomerName(),
+                storeModel.getCustomerSlug()
+        );
+
+        if (!existingRecord.isEmpty()) {
+            return existingRecord.get(0);
+        }
+
+        Store newStore = new Store();
+        newStore.setOriginCountryId(storeModel.getOriginCountryId());
+        newStore.setDestinationCountryId(storeModel.getDestinationCountryId());
+        newStore.setWeight(storeModel.getWeight());
+        newStore.setCreatedAt(storeModel.getCreatedAt());
+        newStore.setCustomerId(storeModel.getCustomerId());
+        newStore.setCustomerName(storeModel.getCustomerName());
+        newStore.setCustomerSlug(storeModel.getCustomerSlug());
+        storeRepository.save(newStore);
+
+        return newStore;
+    }
+
     public Optional<TrackNumber> getOrGenerateTrackingNumber(StoreModel storeModel) {
         // get
         List<Store> existRecords = storeRepository.findWithCriteria(
@@ -72,17 +100,17 @@ public class StoreService {
         return Optional.empty();
     }
 
-    public void update(Long id, String createdAt, String name) {
-        Optional<Store> optStore = storeRepository.findById(id);
-
-        if (optStore.isEmpty()) {
-            throw new RuntimeException("Store not found");
-        }
-        String createdAtFixed = createdAt.replace(" ", "+");
-        Store store = optStore.get();
-        store.setCreatedAt(OffsetDateTime.parse(createdAtFixed));
-        store.setCustomerName(name);
-
-        storeRepository.save(store);
-    }
+//    public void update(Long id, String createdAt, String name) {
+//        Optional<Store> optStore = storeRepository.findById(id);
+//
+//        if (optStore.isEmpty()) {
+//            throw new RuntimeException("Store not found");
+//        }
+//        String createdAtFixed = createdAt.replace(" ", "+");
+//        Store store = optStore.get();
+//        store.setCreatedAt(OffsetDateTime.parse(createdAtFixed));
+//        store.setCustomerName(name);
+//
+//        storeRepository.save(store);
+//    }
 }

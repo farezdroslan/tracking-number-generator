@@ -29,4 +29,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("customerName") String customerName,
             @Param("customerSlug") String customerSlug
     );
+
+    List<Store> findByOriginCountryIdAndDestinationCountryIdAndWeightAndCreatedAtAndCustomerIdAndCustomerNameAndCustomerSlug(String originCountryId, String destinationCountryId, BigDecimal weight, OffsetDateTime createdAt, UUID customerId, String customerName, String customerSlug);
 }

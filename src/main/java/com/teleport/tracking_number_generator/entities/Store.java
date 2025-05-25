@@ -45,6 +45,9 @@ public class Store {
     private String trackingNumber;
 
     // ===== Constructors =====
+    public String getOriginCountryId() {
+        return originCountryId;
+    }
 
     public String getDestinationCountryId() {
         return destinationCountryId;
