@@ -51,6 +51,10 @@ Test endpoints directly from browser.
 
 ## 🔗 Deployed Version
 
+url:
+
+https://tracking-number-generator-app.onrender.com/swagger-ui/index.html#/
+
 Backend is deployed using https://render.com
 
 Database is using https://neon.tech
